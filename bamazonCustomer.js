@@ -27,7 +27,7 @@ var promptCustomer = function(res) {
     inquirer.prompt([{
         type: 'input',
         name: 'choice',
-        message: 'What would you like purchase? [Quite with Q]'
+        message: 'What would you like purchase? [Quit with Q]'
     }]).then(function(answer) {
         var correct = false;
         for (var i = 0; i < res.length; i++) {
@@ -36,7 +36,26 @@ var promptCustomer = function(res) {
                 var product = answer.choice;
                 var id = i;
                 inquirer.prompt({
-                    type
+                    type: "input",
+                    name: "quant",
+                    message: "How many would you like to buy?",
+                    validate: function(value) {
+                        if (isNaN(value) == false) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }).then(function(answer) {
+                    if ((res[id].stockquantity - answer.quant) > 0) {
+                        connection.query("UPDATE products SET stockquantity='" + (res[id].stockquantity - answer.quant) + "' WHERE productname='" + product + "'", function(err, res2) {
+                            console.log("Product Bought!");
+                            makeTable();
+                        })
+                    } else {
+                        console.log("Not a valid selection!");
+                        promptCustomer(res);
+                    }
                 })
             }
         }
