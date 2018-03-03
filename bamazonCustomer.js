@@ -18,8 +18,9 @@ connection.connect(function(err) {
 var makeTable = function() {
     connection.query("SELECT * FROM products", function(err, res) {
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].itemid + " || " + res[i].productname + " ||" + res[i].departmentname + "|| " + res[i].price + "||" + res[i].stockquantity + "\n ");
+            console.log(res[i].itemid + " || " + res[i].productname + " || " + res[i].departmentname + " || " + res[i].price + " || " + res[i].stockquantity + "\n");
         }
+        promptCustomer(res);
     })
 }
 
